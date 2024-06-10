@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 #
 
+import os
 import re
 from collections import OrderedDict
 from typing import FrozenSet, List, Optional
@@ -30,8 +31,16 @@ class Information:
     def read_psa_interface(self) -> macro_collector.PSAMacroEnumerator:
         """Return the list of known key types, algorithms, etc."""
         constructors = macro_collector.InputsForTest()
-        header_file_names = ['include/psa/crypto_values.h',
-                             'include/psa/crypto_extra.h']
+        # Temporary, while Mbed TLS does not just rely on the TF-PSA-Crypto
+        # build system to build its crypto library. When it does, the first
+        # case can just be removed.
+        if os.path.isdir('tf-psa-crypto'):
+            header_file_names = ['tf-psa-crypto/include/psa/crypto_values.h',
+                                 'tf-psa-crypto/include/psa/crypto_extra.h']
+        else:
+            header_file_names = ['include/psa/crypto_values.h',
+                                 'include/psa/crypto_extra.h']
+
         test_suites = ['tests/suites/test_suite_psa_crypto_metadata.data']
         for header_file_name in header_file_names:
             constructors.parse_header(header_file_name)
@@ -126,8 +135,16 @@ _implemented_dependencies = None #type: Optional[FrozenSet[str]] #pylint: disabl
 def hack_dependencies_not_implemented(dependencies: List[str]) -> None:
     global _implemented_dependencies #pylint: disable=global-statement,invalid-name
     if _implemented_dependencies is None:
-        _implemented_dependencies = \
-            read_implemented_dependencies('include/psa/crypto_config.h')
+        # Temporary, while Mbed TLS does not just rely on the TF-PSA-Crypto
+        # build system to build its crypto library. When it does, the first
+        # case can just be removed.
+        if os.path.isdir('tf-psa-crypto'):
+            _implemented_dependencies = \
+                read_implemented_dependencies('tf-psa-crypto/include/psa/crypto_config.h')
+        else:
+            _implemented_dependencies = \
+                read_implemented_dependencies('include/psa/crypto_config.h')
+
     if not all((dep.lstrip('!') in _implemented_dependencies or
                 not dep.lstrip('!').startswith('PSA_WANT'))
                for dep in dependencies):
