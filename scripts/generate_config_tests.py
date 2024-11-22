@@ -164,9 +164,9 @@ class ConfigTestGenerator(test_data_generation.TestGenerator):
     """Generate test cases for configuration reporting."""
 
     def __init__(self, settings):
-        self.mbedtls_config = config.MbedTLSConfig()
-        self.targets['test_suite_config.mbedtls_boolean'] = \
-            lambda: enumerate_boolean_setting_cases(self.mbedtls_config)
+#       self.mbedtls_config = config.MbedTLSConfig()
+#       self.targets['test_suite_config.mbedtls_boolean'] = \
+#           lambda: enumerate_boolean_setting_cases(self.mbedtls_config)
         self.psa_config = config.CryptoConfig()
         self.targets['test_suite_config.psa_boolean'] = \
             lambda: enumerate_boolean_setting_cases(self.psa_config)
