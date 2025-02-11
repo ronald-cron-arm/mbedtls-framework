@@ -1,0 +1,26 @@
+@rem Generate automatically-generated configuration-independent source files
+@rem and build scripts.
+@rem Requirements:
+@rem * Perl must be on the PATH ("perl" command).
+@rem * Python 3.8 or above must be on the PATH ("python" command).
+@rem * Either a C compiler called "cc" must be on the PATH, or
+@rem   the "CC" environment variable must point to a C compiler.
+
+@rem @@@@ library\** @@@@
+@rem psa_crypto_driver_wrappers.h needs to be generated prior to
+@rem generate_visualc_files.pl being invoked.
+python tf-psa-crypto\scripts\generate_driver_wrappers.py || exit /b 1
+
+@rem @@@@ Build @@@@
+
+@rem @@@@ programs\** @@@@
+python scripts\generate_psa_constants.py || exit /b 1
+
+@rem @@@@ tests\** @@@@
+python framework\scripts\generate_bignum_tests.py --directory tf-psa-crypto\tests\suites || exit /b 1
+python framework\scripts\generate_config_tests.py tests\suites\test_suite_config.mbedtls_boolean.data || exit /b 1
+python framework\scripts\generate_config_tests.py --directory tf-psa-crypto\tests\suites tests\suites\test_suite_config.psa_boolean.data || exit /b 1
+python framework\scripts\generate_ecp_tests.py --directory tf-psa-crypto\tests\suites || exit /b 1
+python framework\scripts\generate_psa_tests.py --directory tf-psa-crypto\tests\suites || exit /b 1
+python framework\scripts\generate_test_keys.py --output framework\tests\include\test\test_keys.h || exit /b 1
+python tf-psa-crypto\framework\scripts\generate_test_keys.py --output tf-psa-crypto\framework\tests\include\test\test_keys.h || exit /b 1
