@@ -19,11 +19,26 @@ set -e -u
 DEMO_COMMON_NEED_QUERY_COMPILE_TIME_CONFIG=${DEMO_COMMON_NEED_QUERY_COMPILE_TIME_CONFIG:-1}
 
 need_query_compile_time_config () {
-  if [ $DEMO_COMMON_NEED_QUERY_COMPILE_TIME_CONFIG -eq 1 ]; then
-    return 0;
-  else
+  if [ $DEMO_COMMON_NEED_QUERY_COMPILE_TIME_CONFIG -eq 0 ]; then
     return 1;
   fi
+  return 0;
+}
+
+has_query_compile_time_config () {
+  if ! [ -f "$1/programs/test/query_compile_time_config" ]; then
+    return 1;
+  fi
+  return 0;
+}
+
+# Check if the provided path ($1) can be a valid root for Mbed TLS or TF-PSA-Crypto.
+# This is based on the fact that "scripts/project_name.txt" exists.
+is_valid_root () {
+  if ! [ -f "$1/scripts/project_name.txt" ]; then
+    return 1;
+  fi
+  return 0;
 }
 
 ## At the end of the while loop below $root_dir will point to the root directory
@@ -42,15 +57,17 @@ while true; do
     echo >&2 "This doesn't seem to be an Mbed TLS source tree."
     exit 125
   fi
-  # If we reached the Mbed TLS root folder then we're done.
-  if is_mbedtls_root "$root_dir"; then
-    break;
-  fi
-  # If we reached the TF-PSA-Crypto root folder and the script that sourced
-  # this file does not need query_compile_time_config (which is only available
-  # in Mbed TLS repo) then we're done.
-  if is_tf_psa_crypto_root "$root_dir" && ! need_query_compile_time_config; then
-    break;
+
+  if is_valid_root "$root_dir"; then
+    if ! need_query_compile_time_config; then
+      break;
+    fi
+    # query_compile_time_config is in the Mbed TLS repo, not in the TF-PSA-Crypto
+    # one, so if we reached the TF-PSA-Cryto root path then we might need to
+    # step one folder ahead.
+    if need_query_compile_time_config && has_query_compile_time_config "$root_dir"; then
+      break;
+    fi
   fi
 
   n=$((n - 1))
@@ -62,6 +79,9 @@ while true; do
     *) root_dir=".";;
   esac
 done
+
+# Now that we have a root path we can source the "project_detection.sh" script.
+. "$root_dir/framework/scripts/project_detection.sh"
 
 ## msg LINE...
 ## msg <TEXT_ORIGIN

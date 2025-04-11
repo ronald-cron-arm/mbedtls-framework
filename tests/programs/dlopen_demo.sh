@@ -9,7 +9,6 @@
 DEMO_COMMON_NEED_QUERY_COMPILE_TIME_CONFIG=0
 
 SCRIPT_DIR=$(dirname "$0")
-. "${SCRIPT_DIR}/../../scripts/project_detection.sh"
 . "${SCRIPT_DIR}/../../scripts/demo_common.sh"
 
 msg "Test the dynamic loading of libmbed*"
