@@ -1017,7 +1017,7 @@ main () {
     pre_initialize_variables
     pre_parse_command_line "$@"
 
-    setup_quiet_wrappers
+#   setup_quiet_wrappers
     pre_check_git
     pre_restore_files
     pre_back_up
