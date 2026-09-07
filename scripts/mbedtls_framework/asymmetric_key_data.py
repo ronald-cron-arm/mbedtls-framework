@@ -136,6 +136,12 @@ ASYMMETRIC_KEY_DATA = construct_asymmetric_key_data({
               "c0d3a5a2b416a573dc9909f92f134ac01323ab8f8e36804e578588ba2d09fe7c3e737f771ca112825b548a0ffded6d6a2fd09a3e77dec30e"),
     },
 
+    # Randomly generated with OpenSSL
+    'ECC(PSA_ECC_FAMILY_SM2)': {
+        256: ("d7e7d5ee55648499491ab19ef739406c1dcc688dabbc671561e2ec022dab044c",
+              "04f8a286dce73c1fffdabfdd7940f1729066810840b7cea95a12745876f8e440efac0a55a9e7ae0c821569b0e59bc254db7496e9051f619fb2553855232575452f"),
+    },
+
     # https://datatracker.ietf.org/doc/html/rfc8032#section-7
     'ECC(PSA_ECC_FAMILY_TWISTED_EDWARDS)': {
         255: ("9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60",

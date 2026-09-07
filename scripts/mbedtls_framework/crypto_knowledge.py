@@ -141,6 +141,7 @@ class KeyType:
         'PSA_ECC_FAMILY_BRAINPOOL_P_R1': (160, 192, 224, 256, 320, 384, 512),
         'PSA_ECC_FAMILY_FRP': (256,),
         'PSA_ECC_FAMILY_MONTGOMERY': (255, 448),
+        'PSA_ECC_FAMILY_SM2': (256,),
         'PSA_ECC_FAMILY_TWISTED_EDWARDS': (255, 448),
     } # type: Dict[str, Tuple[int, ...]]
     KEY_TYPE_SIZES = {
