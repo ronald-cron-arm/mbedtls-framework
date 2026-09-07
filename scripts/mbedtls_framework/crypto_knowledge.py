@@ -367,6 +367,7 @@ class Algorithm:
         'MD': AlgorithmCategory.HASH,
         'RIPEMD': AlgorithmCategory.HASH,
         'SM3': AlgorithmCategory.HASH,
+        'SM2DSA': AlgorithmCategory.SIGN,
         'ANY_HASH': AlgorithmCategory.HASH,
         'HMAC': AlgorithmCategory.MAC,
         'BLAKE2_MAC': AlgorithmCategory.MAC,
